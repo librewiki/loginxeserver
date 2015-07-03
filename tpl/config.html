@@ -1,0 +1,97 @@
+<!--// HEADER -->
+<include target="./_header.html" />
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
+
+<script>
+	fetch_unix_timestamp = function()
+	{
+		//return parseInt(new Date().getTime().toString().substring(0, 10));
+		return new Date().getTime().toString();
+	}
+</script>
+<!--// BODY -->
+<div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/loginxeserver/tpl/config/1'" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<section class="section">
+	<h1>
+		{$lang->cmd_mwlogin_config}
+		<a href="#descConfig" class="x_icon-question-sign" data-toggle="#descConfig">{$lang->help}</a>
+	</h1>
+	<p id="descConfig" class="x_alert x_alert-warn">{$lang->about_mwlogin_config}</p>
+	<form method="post" class="x_form-horizontal" action="./">
+		<input type="hidden" name="module" value="loginxeserver">
+		<input type="hidden" name="act" value="procLoginxeserverAdminInsertConfig">
+		<input type="hidden" name="xe_validator_id" value="modules/loginxeserver/tpl/config/1" />
+
+		{@
+		if(!isset($module_config->id)||$module_config->id=='') $id=md5(time());
+		else $id=$module_config->id;
+		if(!isset($module_config->id)||$module_config->key=='') $key=hash('sha256',time());
+		else $key=$module_config->key;
+		}
+		<div class="x_control-group">
+			<div class="x_control-label">{$lang->loginxe_id}</div>
+			<div class="x_controls">
+				<div class="x_input">
+					<input type="text" onclick="this.focus();this.select()" readonly="readonly" step="any" value="{$id}" id="cli_id" name="id" style="width:70%" >
+					<button class="x_btn" type="button" onclick="document.getElementById('cli_id').value=CryptoJS.MD5(fetch_unix_timestamp())">{$lang->loginxe_random_gen}</button>
+				</div>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<div class="x_control-label">{$lang->loginxe_key}</div>
+			<div class="x_controls">
+				<div class="x_input">
+					<input type="text" onclick="this.focus();this.select()" readonly="readonly" step="any" value="{$key}" id="cli_key" name="key" style="width:70%" >
+					<button class="x_btn" type="button" onclick="document.getElementById('cli_key').value=CryptoJS.SHA256(fetch_unix_timestamp())">{$lang->loginxe_random_gen}</button>
+				</div>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<div class="x_control-label">로그인XE 사용 허가 도메인</div>
+			<div class="x_controls">
+				<div class="x_input">
+					<textarea name="loginxe_domains" id="loginxe_domains" rows="8" cols="42">{implode("\n",$module_config->loginxe_domains)}</textarea>
+					<p id="about_domains" class="x_help-block">도메인은 http://나 / 없이 순수 도메인명(example.com)만 입력해 주세요. /xe 등 폴더명 또한 빼주세요. 도메인간 구분은 줄바꿈으로 합니다.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="x_control-group">
+			<div class="x_control-label">{$lang->mwlogin_id}</div>
+			<div class="x_controls">
+				<div class="x_input">
+					<input type="text" step="any" value="{$module_config->clientid}" name="clientid" size="7">
+
+				</div>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<div class="x_control-label">{$lang->mwlogin_key}</div>
+			<div class="x_controls">
+				<div class="x_input">
+					<input type="text" step="any" value="{$module_config->clientkey}"  name="clientkey" size="7">
+				</div>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<div class="x_control-label">{$lang->mwlogin_oauthdomain}</div>
+			<div class="x_controls">
+				<div class="x_input">
+					<input type="text" onclick="this.focus();this.select()" step="any" value="{getNotEncodedFullUrl('','module','loginxeserver','act','dispLoginxeserverOAuthFinish','provider','mw')}" style="width:90%" readonly="readonly">
+				</div>
+			</div>
+		</div>
+		<div class="x_clearfix btnArea">
+			<div class="x_pull-right">
+				<button class="x_btn x_btn-primary" type="submit">{$lang->cmd_registration}</button>
+			</div>
+		</div>
+	</form>
+</section>
+
+<!--// FOOTER -->
+<include target="./_footer.html" />

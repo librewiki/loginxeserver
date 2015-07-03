@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+        <title xml:lang="en">LoginXE Server</title>
+        <title xml:lang="ko">로그인XE 서버</title>
+        <description xml:lang="en">LoginXE Server Module</description>
+        <description xml:lang="ko">로그인XE 서버 모듈</description>
+        <version>0.1</version>
+        <date>2015-06-30</date>
+        <author email_address="admin@itsurea.net" link="http://itsurea.net">
+                <name xml:lang="en">itsurea</name>
+                <name xml:lang="ko">이츠레아</name>
+        </author>
+</module>
+
