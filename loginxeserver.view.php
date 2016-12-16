@@ -171,7 +171,7 @@ class loginxeserverView extends loginxeserver
                         }
 			$gConsumerSecret = $module_config->clientkey;
 
-			$ping_url = 'https://librewiki.net/wiki/%ED%8A%B9%EC%88%98:MWO%EC%9D%B8%EC%A6%9D/initiate?format=json&oauth_callback=oob&oauth_consumer_key=' . $module_config->clientid . '&oauth_version=1.0&oauth_nonce=' . md5( microtime() . mt_rand() ) . '&oauth_timestamp=' . time() .'&oauth_signature_method=HMAC-SHA1';
+			$ping_url = 'https://librewiki.net/wiki/%ED%8A%B9%EC%88%98:MWO%EC%9D%B8%EC%A6%9D/initiate?format=json&oauth_callback=oob&oauth_consumer_key=' . $module_config->clientid . '&oauth_version=1.0&oauth_nonce=' . md5( microtime() . mt_rand() ) . '&oauth_timestamp=' . time() .'&oauth_signature_method=HMAC-SHA1&title=%ED%8A%B9%EC%88%98:MWO%EC%9D%B8%EC%A6%9D/initiate';
 			$signature = $this->sign_request( 'GET', $ping_url );
 			$ping_url .= "&oauth_signature=" . urlencode( $signature );
 
@@ -228,6 +228,8 @@ class loginxeserverView extends loginxeserver
 		$code = Context::get('oauth_verifier');
 		$version = $_SESSION['loginxe_version'];
 		$token = $_SESSION['loginxe_key'];
+		$secret = $_SESSION['loginxe_secret'];
+		global $gConsumerSecret, $gTokenSecret;
 
 		if($code=='' || $state=='' || $service=='' || !isset($_SESSION['loginxe_callback']) || $_SESSION['loginxe_callback']=='' || !isset($token))
 		{
@@ -285,7 +287,10 @@ class loginxeserverView extends loginxeserver
 			$token = $data->access_token;
 		}
 		if($service=='mw') {
-			$ping_url = 'https://librewiki.net/wiki/%ED%8A%B9%EC%88%98:MWO%EC%9D%B8%EC%A6%9D/token?format=json&oauth_verifier=' . $code . '&oauth_consumer_key=' . $module_config->clientid . '&oauth_token=' . $token . '&oauth_version=1.0&oauth_nonce=' . md5( microtime() . mt_rand() ) . '&oauth_timestamp=' . time() . '&oauth_signature_method=HMAC-SHA1';
+			$gConsumerSecret = $module_config->clientkey;
+			$gTokenSecret = $secret;
+			
+			$ping_url = 'https://librewiki.net/wiki/%ED%8A%B9%EC%88%98:MWO%EC%9D%B8%EC%A6%9D/token?format=json&oauth_verifier=' . $code . '&oauth_consumer_key=' . $module_config->clientid . '&oauth_token=' . $token . '&oauth_version=1.0&oauth_nonce=' . md5( microtime() . mt_rand() ) . '&oauth_timestamp=' . time() . '&oauth_signature_method=HMAC-SHA1&title=%ED%8A%B9%EC%88%98:MWO%EC%9D%B8%EC%A6%9D/token';
 			$signature = $this->sign_request( 'GET', $ping_url );
 			$ping_url .= "&oauth_signature=" . urlencode( $signature );
 
