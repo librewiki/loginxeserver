@@ -141,7 +141,7 @@ class loginxeserverView extends loginxeserver
 		$domain = parse_url($callback,PHP_URL_HOST);
 		$oLoginXEServerModel = getModel('loginxeserver');
 		$module_config = $oLoginXEServerModel->getConfig();
-		if(!in_array($domain,$module_config->loginxe_domains)) return new Object(-1,'등록된 도메인이 아닙니다.');
+		if(!in_array($domain,$module_config->loginxe_domains)) return new BaseObject(-1,'등록된 도메인이 아닙니다.');
 		$_SESSION['loginxe_callback'] = $callback;
 
 
@@ -234,21 +234,21 @@ class loginxeserverView extends loginxeserver
 		if($code=='' || $state=='' || $service=='' || !isset($_SESSION['loginxe_callback']) || $_SESSION['loginxe_callback']=='' || !isset($token))
 		{
 			//필요한 값이 없으므로 오류
-			return new Object(-1,'msg_invalid_request');
+			return new BaseObject(-1,'msg_invalid_request');
 		}
 
 		if($isError=='1')
 		{
 			Context::setBrowserTitle('LoginXE Server Error');
-			return new Object(-1,$message);
+			return new BaseObject(-1,$message);
 		}
 
-		if($isError!="") return new Object(-1, Context::get("error_description"));
+		if($isError!="") return new BaseObject(-1, Context::get("error_description"));
 		$stored_state = $_SESSION['loginxe_state'];
 
 		//세션변수 비교(CSRF 방지)
 		if( $state != $stored_state ) {
-			return new Object(-1, 'loginxesvr_invalid_state');
+			return new BaseObject(-1, 'loginxesvr_invalid_state');
 		}
 
 		//if client protocol version is 1.1, just return auth_token
@@ -263,7 +263,7 @@ class loginxeserverView extends loginxeserver
 		//SSL 미지원시 리턴
 		if(!$this->checkOpenSSLSupport())
 		{
-			return new Object(-1,'loginxesvr_need_openssl');
+			return new BaseObject(-1,'loginxesvr_need_openssl');
 		}
 
 		$oLoginXEServerModel = getModel('loginxeserver');
@@ -333,7 +333,7 @@ class loginxeserverView extends loginxeserver
 
 		else
 		{
-			return new Object(-1, 'msg_invalid_request');
+			return new BaseObject(-1, 'msg_invalid_request');
 		}
 
 
