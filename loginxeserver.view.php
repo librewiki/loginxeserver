@@ -337,6 +337,6 @@ class loginxeserverView extends loginxeserver
 		}
 
 
-		Context::set('url',$_SESSION['loginxe_callback'] . '&token=' . urlencode($token) . '&state=' . $state);
+		Context::set('url',htmlspecialchars_decode($_SESSION['loginxe_callback']) . '&token=' . urlencode($token) . '&state=' . $state);
 	}
 }
