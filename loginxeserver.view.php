@@ -69,12 +69,12 @@ class loginxeserverView extends loginxeserver
 		if($code=='' || $state=='' || $service=='')
 		{
 			//필요한 값이 없으므로 오류
-			return new Object(-1,'msg_invalid_request');
+			return new BaseObject(-1,'msg_invalid_request');
 		}
 
 		if(!$this->checkOpenSSLSupport())
 		{
-			return new Object(-1,'loginxesvr_need_openssl');
+			return new BaseObject(-1,'loginxesvr_need_openssl');
 		}
 
 		$oLoginXEServerModel = getModel('loginxeserver');
